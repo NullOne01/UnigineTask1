@@ -1,0 +1,9 @@
+#ifndef UNIGINETASK1_MODEL_GAME_CONSTANTS_H_
+#define UNIGINETASK1_MODEL_GAME_CONSTANTS_H_
+
+/**
+ * Number of units to preallocate.
+ */
+constexpr int MEDIUM_NUMBER_OF_UNITS{10000};
+
+#endif //UNIGINETASK1_MODEL_GAME_CONSTANTS_H_
