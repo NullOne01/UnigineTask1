@@ -16,7 +16,7 @@ public:
 
     std::pair<int, int> addItem(const T &item, const Vector2<double> &pos);
 
-    const std::unordered_map<T, std::pair<int, int>> hash_map;
+    std::unordered_map<T, std::pair<int, int>> hash_map;
 
 private:
     double cell_side_;

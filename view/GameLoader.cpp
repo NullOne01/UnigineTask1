@@ -4,6 +4,9 @@
 
 GameInfo GameLoader::readGameInfo(const std::string &file_name) {
     std::ifstream file_stream(file_name);
+    if (!file_stream.is_open()) {
+        std::throw_with_nested( std::runtime_error("File not found") );
+    }
 
     double sector_angle, view_distance;
     file_stream >> sector_angle >> view_distance;

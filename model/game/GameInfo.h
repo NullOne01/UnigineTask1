@@ -2,6 +2,7 @@
 #define UNIGINETASK1_MODEL_GAME_GAMEINFO_H_
 
 #include <memory>
+#include <vector>
 #include "Unit.h"
 #include "../containers/CellList.h"
 
@@ -14,7 +15,7 @@ public:
     double view_distance;
 
     std::vector<std::unique_ptr<Unit>> units;
-    std::unique_ptr<CellList<Unit *>> world_map;
+    CellList<Unit *> world_map;
 };
 
 #endif //UNIGINETASK1_MODEL_GAME_GAMEINFO_H_
