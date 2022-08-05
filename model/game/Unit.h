@@ -9,6 +9,7 @@ public:
 
     Vector2<double> pos;
     Vector2<double> view;
+    int units_can_see{};
 };
 
 #endif //UNIGINETASK1_MODEL_GAME_UNIT_H_

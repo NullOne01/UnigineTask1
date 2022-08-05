@@ -12,6 +12,7 @@ public:
              const Vector2<double> &left_bottom, const Vector2<double> &right_top);
 
     double sector_angle;
+    double cos_half_sector_angle;
     double view_distance;
 
     std::vector<std::unique_ptr<Unit>> units;

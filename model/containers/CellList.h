@@ -16,6 +16,9 @@ public:
 
     std::pair<int, int> addItem(const T &item, const Vector2<double> &pos);
 
+    std::vector<T> getNeighbours(const T &item);
+
+    // TODO: Unordered map is not cache-friendly. Should use another implementation.
     std::unordered_map<T, std::pair<int, int>> hash_map;
 
 private:
@@ -24,10 +27,13 @@ private:
     Vector2<double> right_top_;
 
     std::vector<std::vector<std::vector<T>>> grid_;
+    std::vector<std::vector<std::vector<T>>> neighbours_;
 
     void generate();
 
     bool isInBounds(const Vector2<double> &pos);
+
+    bool isInBoundsIndexes(int y, int x);
 };
 
 #endif //UNIGINETASK1_MODEL_CONTAINERS_CELLLIST_H_
