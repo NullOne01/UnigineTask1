@@ -26,6 +26,8 @@ def main():
     data_file_name = str(sys.argv[1])
     data_file = open(data_file_name, 'r')
 
+    show_numbers = len(sys.argv) < 3 or sys.argv[2] == "yes"
+
     line = data_file.readline()
 
     sector_angle = float(line.split()[0])
@@ -59,6 +61,9 @@ def main():
                angles='xy', scale_units='xy', scale=1)
     # Unit pos
     plt.plot(origin_arr[:, 0], origin_arr[:, 1], 'go')
+    if show_numbers:
+        for i in range(len(origin_list)):
+            plt.text(origin_arr[i][0], origin_arr[i][1], str(i))
 
     # Sector
     fig = plt.figure(1)
