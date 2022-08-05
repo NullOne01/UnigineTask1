@@ -23,34 +23,35 @@ int main() {
         alignas(16) float unit_y_arr[4] = {static_cast<float>(unit->view.y), static_cast<float>(unit->view.y),
                                            static_cast<float>(unit->view.y), static_cast<float>(unit->view.y)};
 
-        // fuck my life...
+        // fuck my life... SIMD below
         __m128 unit_x = _mm_load_ps(&unit_x_arr[0]);
         __m128 unit_y = _mm_load_ps(&unit_y_arr[0]);
 
-        __m128 r2;
+        __m128 r_length;
         size_t size4 = neighbours.size() - (neighbours.size() % 4);
+        // cos = (dot(unit, b) / |b|)
         for (int i = 0; i < size4; i += 4) {
             __m128 b_x = _mm_load_ps(&neighbours_x[i]);
             __m128 b_y = _mm_load_ps(&neighbours_y[i]);
 
             // Dot
-            __m128 r1 = _mm_mul_ps(unit_x, b_x);
-            r1 = _mm_add_ps(r1, _mm_mul_ps(unit_y, b_y));
+            __m128 r_dot = _mm_mul_ps(unit_x, b_x);
+            r_dot = _mm_add_ps(r_dot, _mm_mul_ps(unit_y, b_y));
 
             __m128 b_x_sqr = _mm_mul_ps(b_x, b_x);
             __m128 b_y_sqr = _mm_mul_ps(b_y, b_y);
 
             // Absolute
-            r2 = _mm_add_ps(b_x_sqr, b_y_sqr);
-            r2 = _mm_sqrt_ps(r2);
+            r_length = _mm_add_ps(b_x_sqr, b_y_sqr);
+            r_length = _mm_sqrt_ps(r_length);
 
             // cos
-            __m128 r3 = _mm_div_ps(r1, r2);
-            _mm_store_ps(&ans[i], r3);
+            __m128 r_cos = _mm_div_ps(r_dot, r_length);
+            _mm_store_ps(&ans[i], r_cos);
         }
 
         for (int i = 0; i < size4; ++i) {
-            if (r2[i] <= game_info.view_distance && ans[i] >= game_info.cos_half_sector_angle) {
+            if (r_length[i] <= game_info.view_distance && ans[i] >= game_info.cos_half_sector_angle) {
                 unit->units_can_see++;
             }
         }
