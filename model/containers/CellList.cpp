@@ -25,6 +25,9 @@ std::pair<int, int> CellList<T>::addItem(const T &item, const Vector2<double> &p
 
 template<typename T>
 std::vector<T> CellList<T>::getNeighbours(const T &item) {
+    std::mutex &mutex = mutexes_pool_->operator[](std::hash<T>{}(item) % mutexes_pool_->size());
+    std::unique_lock<std::mutex> lock(mutex);
+
     std::pair<int, int> item_pos = hash_map[item];
 
     if (!neighbours_[item_pos.first][item_pos.second].empty()) {
@@ -70,6 +73,7 @@ void CellList<T>::generate() {
     std::vector<std::vector<T>> row(cells_num_x, std::vector<T>());
     grid_.resize(cells_num_y, row);
     neighbours_.resize(cells_num_y, row);
+    mutexes_pool_ = std::make_unique<std::array<std::mutex, 32>>();
 }
 
 template<typename T>
