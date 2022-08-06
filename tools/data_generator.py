@@ -17,8 +17,8 @@ def main():
 
     print(f"Generating {units_num} units...")
     for i in range(units_num):
-        x = random.uniform(-100, 100)
-        y = random.uniform(-100, 100)
+        x = random.uniform(-5, 5)
+        y = random.uniform(-5, 5)
         view_x = random.uniform(-1, 1)
         view_y = random.uniform(-1, 1)
 
