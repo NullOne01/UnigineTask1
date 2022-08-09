@@ -2,6 +2,7 @@
 #include <thread>
 #include <xmmintrin.h>
 #include <future>
+#include <algorithm>
 
 void GameCalculation::calculateUnits(GameInfo *game_info) {
     // Best option is one task per CPU.
@@ -34,13 +35,14 @@ void GameCalculation::calculateUnits(GameInfo *game_info) {
 
 void GameCalculation::calculateBatchUnits(GameInfo *game_info, int from, int to) {
     for (int unit_num = from; unit_num < to; ++unit_num) {
-        auto &unit = game_info->units[unit_num];
-        auto neighbours = game_info->world_map.getNeighbours(unit.get());
-        neighbours.erase(std::remove(neighbours.begin(), neighbours.end(), unit.get()), neighbours.end());
-        // Heap allocation. Idk how to create dynamic array without heap.
-        float *neighbours_x = new float[neighbours.size()];
-        float *neighbours_y = new float[neighbours.size()];
-        float *ans = new float[neighbours.size()];
+        auto unit = game_info->units[unit_num].get();
+        auto neighbours = game_info->world_map.getNeighbours(unit);
+        neighbours.erase(std::remove(neighbours.begin(), neighbours.end(), unit), neighbours.end());
+        // Creating huge arrays and praying that this info would fit.
+        constexpr int MAX_ARRAY_SIZE = 1 << 13;
+        alignas(16) float neighbours_x[MAX_ARRAY_SIZE];
+        alignas(16) float neighbours_y[MAX_ARRAY_SIZE];
+        alignas(16) float ans[MAX_ARRAY_SIZE];
         for (int i = 0; i < neighbours.size(); ++i) {
             neighbours_x[i] = neighbours[i]->pos.x - unit->pos.x;
             neighbours_y[i] = neighbours[i]->pos.y - unit->pos.y;
@@ -84,13 +86,9 @@ void GameCalculation::calculateBatchUnits(GameInfo *game_info, int from, int to)
             }
         }
 
-        delete[] neighbours_x;
-        delete[] neighbours_y;
-        delete[] ans;
-
         for (int i = size4; i < neighbours.size(); ++i) {
             auto neighbour = neighbours[i];
-            if (neighbour == unit.get()) {
+            if (neighbour == unit) {
                 continue;
             }
 

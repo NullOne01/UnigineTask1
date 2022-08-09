@@ -4,6 +4,8 @@
 #include <unordered_map>
 #include <vector>
 #include <array>
+#include <memory>
+#include <mutex>
 #include "../math/Vector2.h"
 
 /**
