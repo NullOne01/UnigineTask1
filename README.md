@@ -5,6 +5,11 @@ You can find data files in "resources" directory.
 First line of each file contains angle of sector and view distance.<br>
 Other lines contain position and view vectors.
 
+# Task
+
+There is 2D field. It contains many units. Each unit have position and view direction (radius-vector). All units have constant view distance.
+You should give an answer, how many units can each unit see?
+
 # How this shit was supposed to work
 
 ## Battleground
